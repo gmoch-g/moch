@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-12">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الصفحة الرئيسية</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- ناف بار أو رأس الصفحة -->
+    <header>
+        <div class="header-container">
+            <h1>نظام إدارة المشاريع</h1>
+            <nav>
+                <a href="/">الصفحة الرئيسية</a>
+                <a href="/add_project">اضافة مشاريع مكتلمة المتطلبات الادراج </a>
+                <a href="/contracts">العقود</a>
+                <a href="/reports">التقارير</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- المحتوى الرئيسي -->
+    <main>
+        <div class="search-container">
+            <h2>ابحث عن مشروع</h2>
+            <form action="/" method="POST">
+                <input type="text" name="project_name" id="project_name" placeholder="ابحث عن اسم المشروع" required>
+                <button type="submit" class="search-button">بحث</button>
+            </form>
+        </div>
+
+        <div class="projects-container">
+            <h3>المشاريع</h3>
+            <ul class="projects-list">
+                {% for project in projects %}
+                    <li class="project-item">
+                        <strong>{{ project[1] }}</strong> - {{ project[2] }} - {{ project[3] }} - {{ project[4] }} - {{ project[5] }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 نظام إدارة المشاريع | جميع الحقوق محفوظة</p>
+    </footer>
+</body>
+</html>

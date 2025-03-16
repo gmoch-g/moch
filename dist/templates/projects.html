@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2 class="text-center my-4">إدارة المشاريع</h2>
+
+<div class="container">
+    <a href="{{ url_for('add_project') }}" class="btn btn-primary mb-3">إضافة مشروع جديد</a>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>التسلسل</th>
+                <th>المحافظة</th>
+                <th>المشروع</th>
+                <th>الكلفة الكلية</th>
+                <th>الإعلان</th>
+                <th>الإجراءات</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>{{ project[1] }}</td>
+                <td>{{ project[2] }}</td>
+                <td>{{ project[3] }}</td>
+                <td>{{ project[6] }}</td>
+                <td>{{ project[9] }}</td>
+                <td>
+                    <a href="{{ url_for('add_project') }}" class="btn btn-sm btn-success">إضافة جديد</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

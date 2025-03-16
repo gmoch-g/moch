@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رفع ملف Excel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <style>
+        body {
+            direction: rtl; /* تعيين اتجاه النص من اليمين إلى اليسار */
+            background-color: #f8f9fa; /* خلفية خفيفة */
+        }
+        .container {
+            text-align: right; /* محاذاة النص إلى اليمين */
+        }
+        .alert-container {
+            margin-top: 20px;
+        }
+        .table {
+            border-collapse: collapse; /* دمج الحدود */
+        }
+        .table th, .table td {
+            vertical-align: middle; /* محاذاة عمودي للنص */
+            text-align: center; /* محاذاة النص في الوسط */
+            padding: 15px; /* زيادة الحشوة داخل الخلايا */
+            border: 1px solid #dee2e6; /* تحديد الحدود */
+        }
+        .table th {
+            background-color: #343a40; /* لون خلفية العناوين */
+            color: white; /* لون النص */
+            font-size: 1.2rem; /* زيادة حجم النص في العناوين */
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f2f2f2; /* خلفية خفيفة للصفوف الفردية */
+        }
+        footer {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">رفع ملف Excel للمشاريع</h2>
+
+        <!-- عرض رسائل الفلاش -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="alert-container">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('upload_excel') }}" method="POST" class="row g-3 p-4 bg-light shadow rounded" enctype="multipart/form-data">
+            <div class="col-md-12">
+                <label class="form-label fw-bold">اختر ملف Excel:</label>
+                <input type="file" name="file" class="form-control border-primary" accept=".xlsx,.xls" required>
+            </div>
+
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-primary btn-lg">استيراد الملف</button>
+            </div>
+        </form>
+
+        {% if المشاريع %}
+            <h3 class="mt-4">نتائج الاستراد:</h3>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>التسلسل</th>
+                <th>المحافظة</th>
+                <th>اسم المشروع</th>
+                <th>مدرج في وزارة التخطيط</th>
+                <th>مؤشر لدى وزارة المالية</th>
+                <th>الكلفة الكلية</th>
+                <th>الاستثناء من أساليب التعاقد</th>
+                <th>استثناء</th>
+                <th>الإعلان</th>
+                <th>دراسة سيرة ذاتية</th>
+                <th>الدعوات</th>
+                <th>الوثيقة القياسية</th>
+                <th>التخويل</th>
+                <th>تاريخ غلق الدعوات</th>
+                <th>لجان الفتح</th>
+                <th>لجنة تحليل</th>
+                <th>قرار لجنة التحليل إلى دائرة العقود</th>
+                <th>لجنة المراجعة والمصادقة</th>
+                <th>الإحالة</th>
+                <th>مسودة العقد</th>
+                <th>توقيع العقد</th>
+                <th>الملاحظات</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for مشروع in المشاريع %}
+            <tr>
+                <td>{{ مشروع.get('التسلسل', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('المحافظة', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('المشروع', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('مدرج_في_وزارة_التخطيط', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('مؤشر_لدى_وزارة_المالية', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('الكلفة_الكلية', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('الاستثناء_من_أساليب_التعاقد', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('استثناء', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('الإعلان', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('دراسة_سيرة_ذاتية', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('الدعوات', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('الوثيقة_القياسية', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('التخويل', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('تاريخ_غلق_الدعوات', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('لجان_الفتح', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('لجنة_تحليل', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('قرار_لجنة_التحليل_الى_دائرة_العقود', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('لجنة_المراجعة_والمصادقة', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('الإحالة', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('مسودة_العقد', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('توقيع_العقد', 'غير متوفر') }}</td>
+                <td>{{ مشروع.get('ملاحظات', 'غير متوفر') }}</td>
+            </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p class="text-center text-danger">لا توجد مشاريع مطابقة.</p>
+        {% endif %}
+    </div>
+
+    <footer class="text-center mt-5">
+        <p>جميع الحقوق محفوظة &copy; {{ year }}</p>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

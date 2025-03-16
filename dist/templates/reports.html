@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2 class="text-center">التقارير</h2>
+
+<!-- نموذج البحث بالصوت والكتابة -->
+<div class="search-container text-center">
+    <h3>ابحث عن المشروع</h3>
+    <input type="text" id="text-search" class="form-control w-50 d-inline" placeholder="ادخل اسم المشروع">
+    <button class="btn btn-primary" onclick="searchByText()">بحث</button>
+    <button class="btn btn-secondary" onclick="startVoiceRecognition()">🔊 بحث بالصوت</button>
+</div>
+
+<!-- جدول عرض التقارير مع الحقول الجديدة -->
+<div class="table-responsive mt-4">
+    <table class="table table-bordered text-center">
+        <thead class="table-dark">
+            <tr>
+                <th>التسلسل</th>
+                <th>المحافظة</th>
+                <th>المشروع</th>
+                <th>الكلفة الكلية</th>
+                <th>الإعلان</th>
+                <th>تاريخ غلق الدعوات</th>
+                <th>لجنة تحليل</th>
+                <th>قرار لجنة التحليل الى دائرة العقود</th>
+                <th>لجنة المراجعة والمصادقة</th>
+                <th>الإحالة</th>
+                <th>مسودة العقد</th>
+                <th>توقيع العقد</th>
+                <th>ملاحظات</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for report in reports %}
+            <tr>
+                <td>{{ report[1] }}</td>
+                <td>{{ report[2] }}</td>
+                <td>{{ report[3] }}</td>
+                <td>{{ report[5] }}</td>
+                <td>{{ report[9] }}</td>
+                <td>{{ report[13] }}</td>
+                <td>{{ report[15] }}</td>
+                <td>{{ report[16] }}</td>
+                <td>{{ report[18] }}</td>
+                <td>{{ report[19] }}</td>
+                <td>{{ report[20] }}</td>
+                <td>{{ report[21] }}</td>
+                <td>{{ report[22] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // البحث عن طريق الكتابة
+    function searchByText() {
+        let projectName = document.getElementById('text-search').value;
+        fetch('/search_reports', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ project_name: projectName })
+        })
+        .then(response => response.json())
+        .then(data => {
+            updateReportTable(data);
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // البحث عن طريق الصوت
+    function startVoiceRecognition() {
+        if (annyang) {
+            let commands = {
+                'ابحث عن *name': function(name) {
+                    document.getElementById('text-search').value = name;
+                    searchByText();
+                }
+            };
+            annyang.addCommands(commands);
+            annyang.start();
+        }
+    }
+
+    // تحديث الجدول بالنتائج الجديدة
+    function updateReportTable(data) {
+        let tableBody = document.querySelector('tbody');
+        tableBody.innerHTML = '';
+        data.forEach(report => {
+            let row = `<tr>
+                <td>${report[1]}</td>
+                <td>${report[2]}</td>
+                <td>${report[3]}</td>
+                <td>${report[5]}</td>
+                <td>${report[9]}</td>
+                <td>${report[13]}</td>
+                <td>${report[15]}</td>
+                <td>${report[16]}</td>
+                <td>${report[18]}</td>
+                <td>${report[19]}</td>
+                <td>${report[20]}</td>
+                <td>${report[21]}</td>
+                <td>${report[22]}</td>
+            </tr>`;
+            tableBody.innerHTML += row;
+        });
+    }
+</script>
+
+{% endblock %}

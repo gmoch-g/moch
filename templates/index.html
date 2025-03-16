@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الصفحة الرئيسية</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <h1>الصفحة الرئيسية</h1>
+
+    <!-- اختيارات النظام -->
+    <div class="choices">
+        <button onclick="window.location.href='/add_project'">إضافة مشروع</button>
+        <button onclick="window.location.href='/contracts'">تعديل اوحذف بيانات الادخال</button>
+        <button onclick="window.location.href='/reports'">التقارير</button>
+    </div>
+
+    <hr>
+
+    <!-- نموذج البحث عن اسم المشروع -->
+    <h2>البحث عن مشروع</h2>
+    <form action="/" method="POST">
+        <input type="text" name="project_name" id="project_name" placeholder="ابحث عن اسم المشروع" required>
+        <button type="submit">بحث</button>
+    </form>
+
+    <!-- عرض نتائج البحث -->
+    <h3>المشاريع</h3>
+    <ul>
+        {% for project in projects %}
+            <li>{{ project[1] }} - {{ project[2] }} - {{ project[3] }} - {{ project[4] }} - {{ project[5] }}</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+<h1>تسجيل مستخدم جديد</h1>
+<form method="post">
+    <label>اسم المستخدم:</label><br>
+    <input type="text" name="username" required><br><br>
+
+    <label>كلمة المرور:</label><br>
+    <input type="password" name="password" required><br><br>
+
+    <input type="submit" value="تسجيل">
+</form>
+
+<p>لديك حساب بالفعل؟ <a href="{{ url_for('login') }}">تسجيل الدخول</a></p>

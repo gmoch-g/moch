@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<link rel="manifest" href="/manifest.json">
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+            .then(() => console.log('Service Worker Registered'));
+    }
+</script>
+
+<h2 class="text-center">الصفحة الرئيسية</h2>
+
+<form action="/home" method="POST">
+    <div class="mb-3">
+        <button type="submit" name="manage_projects" class="btn btn-success w-100">إدارة المشاريع</button>
+    </div>
+    <div class="mb-3">
+        <button type="submit" name="contracts" class="btn btn-info w-100">العقود</button>
+    </div>
+    <div class="mb-3">
+        <button type="submit" name="reports" class="btn btn-primary w-100">التقارير</button>
+    </div>
+</form>
+{% endblock %}

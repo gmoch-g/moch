@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2 class="text-center my-4 text-primary">الصفحة الرئيسية</h2>
+
+<div class="container">
+    <div class="row g-3">
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('add_project') }}" class="btn btn-success w-100 shadow hover-effect">
+                <i class="fas fa-plus-circle"></i> إضافة مشروع
+            </a>
+        </div>
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('edit_project') }}" class="btn btn-info w-100 shadow hover-effect">
+                <i class="fas fa-edit"></i> تعديل حسب اسم المشروع
+            </a>
+        </div>
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('delete_project') }}" class="btn btn-danger w-100 shadow hover-effect">
+                <i class="fas fa-trash-alt"></i> حذف مشروع
+            </a>
+        </div>
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('reports') }}" class="btn btn-warning w-100 shadow hover-effect">
+                <i class="fas fa-map-marker-alt"></i> تقرير حسب اسم المشروع
+            </a>
+        </div>
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('reports1') }}" class="btn btn-warning w-100 shadow hover-effect">
+                <i class="fas fa-map-marker-alt"></i> تقرير حسب المحافظة
+            </a>
+        </div>
+        <a href="{{ url_for('export_excel') }}" class="btn btn-success btn-lg my-3">
+    📥 تصدير إلى Excel
+</a>
+
+    </div>
+</div>
+
+<style>
+    .hover-effect {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .hover-effect:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+</style>
+{% endblock %}

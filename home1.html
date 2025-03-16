@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2 class="text-center">الصفحة الرئيسية</h2>
+<form action="/home" method="POST">
+    <div class="mb-3">
+        <button type="submit" name="projects" class="btn btn-success w-100">إدارة مشاريع</button>
+    </div>
+    <div class="mb-3">
+        <button type="submit" name="contracts" class="btn btn-info w-100">العقود</button>
+    </div>
+    <div class="mb-3">
+        <button type="submit" name="reports" class="btn btn-primary w-100">التقارير</button>
+    </div>
+</form>
+{% endblock %}
