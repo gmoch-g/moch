@@ -4,10 +4,8 @@ import pandas as pd
 from flask import Response
 from flask import Flask, send_file  # تأكد من استيراد send_file
 from werkzeug.security import generate_password_hash, check_password_hash
-
 app = Flask(__name__)
 app.secret_key = 'secret123'  # مفتاح الجلسة لتأمين الكوكيز
-
 # إنشاء قاعدة البيانات والجداول
 def init_db():
     conn = sqlite3.connect('projects.db')
@@ -31,12 +29,12 @@ def init_db():
                     التخويل BOOLEAN,
                     تاريخ_غلق_الدعوات DATE,
                     لجان_الفتح BOOLEAN,
-                    لجنة_تحليل TEXT,
-                    قرار_لجنة_التحليل_الى_دائرة_العقود DATE,
-                    لجنة_المراجعة والمصادقة TEXT,
-                    الإحالة TEXT,
-                    مسودة_العقد TEXT,
-                    توقيع_العقد DATE,
+                    لجنة_تحليل BOOLEAN,
+                    قرار_لجنة_التحليل_الى_دائرة_العقود BOOLEAN,
+                    لجنة_المراجعة والمصادقة BOOLEAN,
+                    الإحالة BOOLEAN,
+                    مسودة_العقد BOOLEAN,
+                    توقيع_العقد BOOLEAN,
                     ملاحظات TEXT
                 )''')
 
@@ -158,7 +156,7 @@ def add_project():
             'تاريخ_غلق_الدعوات': request.form.get('تاريخ_غلق_الدعوات', '').strip(),
             'لجنة_تحليل': request.form.get('لجنة_تحليل', '').strip(),
             'قرار_لجنة_التحليل_الى_دائرة_العقود': request.form.get('قرار_لجنة_التحليل_الى_دائرة_العقود', '').strip(),
-            'لجنة_المراجعة_والمصادقة': request.form.get('لجنة_المراجعة_والمصادقة', '').strip(),
+            'لجنة_المراجعة والمصادقة': request.form.get('لجنة_المراجعة والمصادقة', '').strip(),
             'الإحالة': request.form.get('الإحالة', '').strip(),
             'مسودة_العقد': request.form.get('مسودة_العقد', '').strip(),
             'توقيع_العقد': request.form.get('توقيع_العقد', '').strip(),
