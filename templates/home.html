@@ -11,7 +11,7 @@
             </a>
         </div>
         <div class="col-md-6 mb-3">
-            <a href="{{ url_for('edit_project') }}" class="btn btn-info w-100 shadow hover-effect">
+            <a href="{{ url_for('edit_project') }}" class="btn btn-primary w-100 shadow hover-effect">
                 <i class="fas fa-edit"></i> تعديل حسب اسم المشروع
             </a>
         </div>
@@ -26,14 +26,22 @@
             </a>
         </div>
         <div class="col-md-6 mb-3">
-            <a href="{{ url_for('reports1') }}" class="btn btn-warning w-100 shadow hover-effect">
+            <a href="{{ url_for('reports1') }}" class="btn btn-info w-100 shadow hover-effect">
                 <i class="fas fa-map-marker-alt"></i> تقرير حسب المحافظة
             </a>
         </div>
-        <a href="{{ url_for('export_excel') }}" class="btn btn-success btn-lg my-3">
-    📥 تصدير إلى Excel
-</a>
-
+        <div class="col-md-6 mb-3">
+            <a href="{{ url_for('reportall') }}" class="btn btn-dark w-100 shadow hover-effect">
+                <i class="fas fa-map-marker-alt"></i> تقرير شامل
+            </a>
+        </div>
+        <form method="POST" action="{{ url_for('backup') }}">
+            <button type="submit" class="btn btn-secondary w-100 shadow hover-effect">
+                <i class="fas fa-archive"></i> إنشاء نسخة احتياطية
+            </button>
+          <a href="{{ url_for('export_excel') }}" class="btn btn-outline-success btn-lg my-3">
+            📥 تصدير إلى Excel
+        </a>
     </div>
 </div>
 

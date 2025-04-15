@@ -21,140 +21,135 @@
                             <input type="hidden" name="project_id" value="{{ project['id'] }}">
 
                             <h4 class="mb-3" style="color: #ffffff;">تفاصيل المشروع</h4>
-<!-- اختيار المحافظة -->
-        <div class="col-md-6">
-            <label class="form-label fw-bold">المحافظة:</label>
-            <select name="المحافظة" class="form-select border-primary" required>
-                <option value="" disabled selected>اختر المحافظة</option>
-                {% set المحافظات = ['بغداد', 'البصرة', 'نينوى', 'الأنبار', 'كركوك', 'أربيل',
-                                    'السليمانية', 'دهوك', 'كربلاء', 'النجف', 'واسط', 'ذي قار',
-                                    'ميسان', 'المثنى', 'القادسية', 'بابل', 'ديالى', 'صلاح الدين'] %}
-                {% for محافظة in المحافظات %}
-                <option value="{{ محافظة }}">{{ محافظة }}</option>
-                {% endfor %}
-            </select>
-        </div>
+<!-- التسلسل -->
+<input type="hidden" name="التسلسل" value="{{ project['التسلسل'] }}">
 
-        <!-- المشروع -->
-        <div class="col-md-6">
-            <label class="form-label fw-bold">اسم المشروع:</label>
-            <input type="text" name="المشروع" class="form-control border-primary" required>
-        </div>
+<!-- المحافظة -->
+<div class="col-md-6">
+    <label class="form-label fw-bold">المحافظة:</label>
+    <input type="text" name="المحافظة" class="form-control border-primary" value="{{ project['المحافظة'] }}" required>
+</div>
 
-        <!-- مدرج في وزارة التخطيط -->
-        <div class="col-md-6">
-            <label class="form-label fw-bold">مدرج في وزارة التخطيط:</label>
-            <select name="مدرج_في_وزارة_التخطيط" class="form-select border-info" required>
-                <option value="مدرج">مدرج</option>
-                <option value="قيد الإدراج">قيد الإدراج</option>
-            </select>
-        </div>
+<!-- المشروع -->
+<div class="col-md-6">
+    <label class="form-label fw-bold">اسم المشروع:</label>
+    <input type="text" name="المشروع" class="form-control border-primary" value="{{ project['المشروع'] }}" required>
+</div>
 
-        <!-- مؤشر لدى وزارة المالية -->
-        <div class="col-md-6">
-            <label class="form-label fw-bold">مؤشر لدى وزارة المالية:</label>
-            <select name="مؤشر_لدى_وزارة_المالية" class="form-select border-success" required>
-                <option value="مؤشر">مؤشر</option>
-                <option value="غير مؤشر">غير مؤشر</option>
-            </select>
-        </div>
+<!-- مدرج في وزارة التخطيط -->
+<div class="col-md-6">
+    <label class="form-label fw-bold">مدرج في وزارة التخطيط:</label>
+    <select name="مدرج_في_وزارة_التخطيط" class="form-select border-info" required>
+        <option value="مدرج" {% if project['مدرج_في_وزارة_التخطيط'] == 'مدرج' %} selected {% endif %}>مدرج</option>
+        <option value="قيد الإدراج" {% if project['مدرج_في_وزارة_التخطيط'] == 'قيد الإدراج' %} selected {% endif %}>قيد الإدراج</option>
+    </select>
+</div>
 
-        <!-- الكلفة الكلية (دينار) -->
-        <div class="col-md-6">
-            <label class="form-label fw-bold">الكلفة الكلية (دينار):</label>
-            <input type="number" name="الكلفة_الكلية" class="form-control border-primary" required>
-        </div>
+<!-- مؤشر لدى وزارة المالية -->
+<div class="col-md-6">
+    <label class="form-label fw-bold">مؤشر لدى وزارة المالية:</label>
+    <select name="مؤشر_لدى_وزارة_المالية" class="form-select border-success" required>
+        <option value="مؤشر" {% if project['مؤشر_لدى_وزارة_المالية'] == 'مؤشر' %} selected {% endif %}>مؤشر</option>
+        <option value="غير مؤشر" {% if project['مؤشر_لدى_وزارة_المالية'] == 'غير مؤشر' %} selected {% endif %}>غير مؤشر</option>
+    </select>
+</div>
 
-        <!-- الاستثناء من أساليب التعاقد -->
-        <div class="col-md-6">
-            <label class="form-label fw-bold">الاستثناء من أساليب التعاقد (دعوة/إعلان):</label>
-            <select name="الاستثناء_من_أساليب_التعاقد" class="form-select border-warning" required>
-                <option value="دعوة">دعوة</option>
-                <option value="إعلان">إعلان</option>
-            </select>
-        </div>
+<!-- الكلفة الكلية (دينار) -->
+<div class="col-md-6">
+    <label class="form-label fw-bold">الكلفة الكلية (دينار):</label>
+    <input type="number" name="الكلفة_الكلية" class="form-control border-primary" value="{{ project['الكلفة_الكلية'] }}" required>
+</div>
 
-        <!-- استثناء (تصميم وتنفيذ / جداول كميات) -->
-        <div class="col-md-6">
-            <label class="form-label fw-bold">استثناء (تصميم وتنفيذ / جداول كميات):</label>
-            <select name="استثناء" class="form-select border-danger" required>
-                <option value="تصميم وتنفيذ">تصميم وتنفيذ</option>
-                <option value="جداول كميات">جداول كميات</option>
-            </select>
-        </div>
+<!-- الاستثناء من أساليب التعاقد -->
+<div class="col-md-6">
+    <label class="form-label fw-bold">الاستثناء من أساليب التعاقد (دعوة/إعلان):</label>
+    <select name="الاستثناء_من_أساليب_التعاقد" class="form-select border-warning" required>
+        <option value="دعوة" {% if project['الاستثناء_من_أساليب_التعاقد'] == 'دعوة' %} selected {% endif %}>دعوة</option>
+        <option value="إعلان" {% if project['الاستثناء_من_أساليب_التعاقد'] == 'إعلان' %} selected {% endif %}>إعلان</option>
+    </select>
+</div>
 
-        <!-- الإعلان -->
+<!-- استثناء (تصميم وتنفيذ / جداول كميات) -->
+<div class="col-md-6">
+    <label class="form-label fw-bold">استثناء (تصميم وتنفيذ / جداول كميات):</label>
+    <select name="استثناء" class="form-select border-danger" required>
+        <option value="تصميم وتنفيذ" {% if project['استثناء'] == 'تصميم وتنفيذ' %} selected {% endif %}>تصميم وتنفيذ</option>
+        <option value="جداول كميات" {% if project['استثناء'] == 'جداول كميات' %} selected {% endif %}>جداول كميات</option>
+    </select>
+</div>
 
-        <div class="col-md-6">
-            <label class="form-label fw-bold">الإعلان:</label>
-            <input type="text" name="الإعلان" class="form-control border-primary" required>
-        </div>
+<!-- الإعلان -->
+<div class="col-md-6">
+    <label class="form-label fw-bold">الإعلان:</label>
+    <input type="text" name="الإعلان" class="form-control border-primary" value="{{ project['الإعلان'] }}" required>
+</div>
 
-        <!-- دراسة سيرة ذاتية -->
-        <div class="col-md-6">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="دراسة_سيرة_ذاتية" value="✅" id="دراسة_سيرة_ذاتية">
-                <label class="form-check-label fw-bold" for="دراسة_سيرة_ذاتية">دراسة سيرة ذاتية</label>
-            </div>
-        </div>
-
-        <!-- الدعوات -->
-        <div class="col-md-6">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="الدعوات" value="✅" id="الدعوات">
-                <label class="form-check-label fw-bold" for="الدعوات">الدعوات</label>
-            </div>
-        </div>
-
-        <!-- الوثيقة القياسية -->
-        <div class="col-md-6">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="الوثيقة_القياسية" value="✅" id="الوثيقة_القياسية">
-                <label class="form-check-label fw-bold" for="الوثيقة_القياسية">الوثيقة القياسية</label>
-            </div>
-        </div>
-
-        <!-- التخويل -->
-        <div class="col-md-6">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="التخويل" value="✅" id="التخويل">
-                <label class="form-check-label fw-bold" for="التخويل">التخويل</label>
-            </div>
-        </div>
-
-        <!-- لجنة فتح -->
-        <div class="col-md-6">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="لجان_الفتح" value="✅" id="لجان_الفتح">
-                <label class="form-check-label fw-bold" for="لجان_الفتح">لجنة الفتح</label>
-            </div>
-        </div>
-
-        <!-- تاريخ غلق الدعوات -->
-        <div class="col-md-6">
-            <label class="form-label fw-bold">تاريخ غلق الدعوات:</label>
-            <input type="date" name="تاريخ_غلق_الدعوات" class="form-control border-primary" required>
-        </div>
-              <!-- لجنة تحليل -->
-        <div class="col-md-6">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="لجنة_تحليل" value="✅" id="لجنة_تحليل">
-                <label class="form-check-label fw-bold" for="لجنة_تحليل">لجنة تحليل</label>
-            </div>
-        </div>
-
-        <!-- قرار لجنة التحليل إلى دائرة العقود -->
-                <div class="col-md-6">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="قرار_لجنة_التحليل_الى_دائرة_العقود" value="صح" id="قرار_لجنة_التحليل_الى_دائرة_العقود">
-                <label class="form-check-label fw-bold" for="قرار_لجنة_التحليل_الى_دائرة_العقود">قرار لجنة التحليل الى دائرة العقود</label>
-            </div>
-        </div>
-
-        <!-- لجنة المراجعة والمصادقة -->
+<!-- دراسة سيرة ذاتية -->
 <div class="col-md-6">
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="لجنة_المراجعة_والمصادقة" value="1" id="لجنة_المراجعة_والمصادقة">
+        <input class="form-check-input" type="checkbox" name="دراسة_سيرة_ذاتية" value="✅" id="دراسة_سيرة_ذاتية" {% if project['دراسة_سيرة_ذاتية'] %} checked {% endif %}>
+        <label class="form-check-label fw-bold" for="دراسة_سيرة_ذاتية">دراسة السيرة الذاتية</label>
+    </div>
+</div>
+
+<!-- الدعوات -->
+<div class="col-md-6">
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="الدعوات" value="✅" id="الدعوات" {% if project['الدعوات'] %} checked {% endif %}>
+        <label class="form-check-label fw-bold" for="الدعوات">الدعوات</label>
+    </div>
+</div>
+
+<!-- الوثيقة القياسية -->
+<div class="col-md-6">
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="الوثيقة_القياسية" value="✅" id="الوثيقة_القياسية" {% if project['الوثيقة_القياسية'] %} checked {% endif %}>
+        <label class="form-check-label fw-bold" for="الوثيقة_القياسية">الوثيقة القياسية</label>
+    </div>
+</div>
+
+<!-- التخويل -->
+<div class="col-md-6">
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="التخويل" value="✅" id="التخويل" {% if project['التخويل'] %} checked {% endif %}>
+        <label class="form-check-label fw-bold" for="التخويل">التخويل</label>
+    </div>
+</div>
+
+<!-- تاريخ غلق الدعوات -->
+<div class="col-md-6">
+    <label class="form-label fw-bold">تاريخ غلق الدعوات:</label>
+    <input type="date" name="تاريخ_غلق_الدعوات" class="form-control border-primary" value="{{ project['تاريخ_غلق_الدعوات'] }}">
+</div>
+
+<!-- لجان الفتح -->
+<div class="col-md-6">
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="لجان_الفتح" value="✅" id="لجان_الفتح" {% if project['لجان_الفتح'] %} checked {% endif %}>
+        <label class="form-check-label fw-bold" for="لجان_الفتح">لجان الفتح</label>
+    </div>
+</div>
+
+<!-- لجنة التحليل -->
+<div class="col-md-6">
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="لجنة_تحليل" value="✅" id="لجنة_تحليل" {% if project['لجنة_تحليل'] %} checked {% endif %}>
+        <label class="form-check-label fw-bold" for="لجنة_تحليل">لجنة التحليل</label>
+    </div>
+</div>
+
+<!-- قرار لجنة التحليل إلى دائرة العقود -->
+<div class="col-md-6">
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="قرار_لجنة_التحليل_الى_دائرة_العقود" value="✅" id="قرار_لجنة_التحليل_الى_دائرة_العقود" {% if project['قرار_لجنة_التحليل_الى_دائرة_العقود'] %} checked {% endif %}>
+        <label class="form-check-label fw-bold" for="قرار_لجنة_التحليل_الى_دائرة_العقود">قرار لجنة التحليل إلى دائرة العقود</label>
+    </div>
+</div>
+
+<!-- لجنة المراجعة والمصادقة -->
+<div class="col-md-6">
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="لجنة_المراجعة_والمصادقة" value="✅" id="لجنة_المراجعة_والمصادقة" {% if project['لجنة_المراجعة_والمصادقة'] %} checked {% endif %}>
         <label class="form-check-label fw-bold" for="لجنة_المراجعة_والمصادقة">لجنة المراجعة والمصادقة</label>
     </div>
 </div>
@@ -162,7 +157,7 @@
 <!-- الإحالة -->
 <div class="col-md-6">
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="الإحالة" value="✅" id="الإحالة">
+        <input class="form-check-input" type="checkbox" name="الإحالة" value="✅" id="الإحالة" {% if project['الإحالة'] %} checked {% endif %}>
         <label class="form-check-label fw-bold" for="الإحالة">الإحالة</label>
     </div>
 </div>
@@ -170,7 +165,7 @@
 <!-- مسودة العقد -->
 <div class="col-md-6">
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="مسودة_العقد" value="✅" id="مسودة_العقد">
+        <input class="form-check-input" type="checkbox" name="مسودة_العقد" value="✅" id="مسودة_العقد" {% if project['مسودة_العقد'] %} checked {% endif %}>
         <label class="form-check-label fw-bold" for="مسودة_العقد">مسودة العقد</label>
     </div>
 </div>
@@ -178,19 +173,18 @@
 <!-- توقيع العقد -->
 <div class="col-md-6">
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="توقيع_العقد" value="✅" id="توقيع_العقد">
+        <input class="form-check-input" type="checkbox" name="توقيع_العقد" value="✅" id="توقيع_العقد" {% if project['توقيع_العقد'] %} checked {% endif %}>
         <label class="form-check-label fw-bold" for="توقيع_العقد">توقيع العقد</label>
     </div>
 </div>
-        <!-- ملاحظات -->
-        <div class="col-md-12">
-            <label class="form-label fw-bold">ملاحظات:</label>
-            <textarea name="ملاحظات" class="form-control border-secondary" rows="3"></textarea>
-        </div>
 
-                            <button type="submit" class="btn btn-success w-100 btn-lg" style="border-radius: 10px; font-size: 20px;">حفظ التعديلات</button>
-                        </form>
-                    </div>
+<!-- ملاحظات -->
+<div class="col-md-12">
+    <label class="form-label fw-bold">ملاحظات:</label>
+    <textarea name="ملاحظات" class="form-control border-secondary" rows="4">{{ project['ملاحظات'] }}</textarea>
+</div>
+
+<button type="submit" class="btn btn-success w-100 btn-lg" style="border-radius: 10px;">حفظ التعديلات</button><button type="submit" class="btn btn-success w-100 btn-lg" style="border-radius: 10px;">حفظ التعديلات</button>
                 {% endfor %}
             </div>
         {% else %}

@@ -1,11 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
 import sqlite3
+
 import pandas as pd
-from flask import Response
-from flask import Flask, send_file  # تأكد من استيراد send_file
+from flask import Flask, render_template, request, session, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
-app.secret_key = 'secret123'  # مفتاح الجلسة لتأمين الكوكيز
+app.secret_key = 'secret123'
 # إنشاء قاعدة البيانات والجداول
 def init_db():
     conn = sqlite3.connect('projects.db')
@@ -22,7 +21,7 @@ def init_db():
                     الكلفة_الكلية REAL,
                     الاستثناء_من_أساليب_التعاقد TEXT,
                     استثناء TEXT,
-                    الإعلان DATE,
+                    الإعلان TEXT,
                     دراسة_سيرة_ذاتية BOOLEAN,
                     الدعوات BOOLEAN,
                     الوثيقة_القياسية BOOLEAN,
@@ -54,11 +53,13 @@ def init_db():
     conn.commit()
     conn.close()
 
+
 # دالة للاتصال بقاعدة البيانات
 def get_db_connection():
     conn = sqlite3.connect('projects.db')
     conn.row_factory = sqlite3.Row
     return conn
+
 
 # صفحة تسجيل الدخول
 @app.route('/', methods=['GET', 'POST'])
@@ -81,6 +82,7 @@ def login():
             flash('اسم المستخدم أو كلمة المرور غير صحيحة.', 'danger')
 
     return render_template('login.html')
+
 
 # صفحة تسجيل المستخدمين
 @app.route('/register', methods=['GET', 'POST'])
@@ -109,6 +111,7 @@ def register():
 
     return render_template('register.html')
 
+
 # تسجيل الخروج
 @app.route('/logout')
 def logout():
@@ -116,7 +119,7 @@ def logout():
     flash('تم تسجيل الخروج.', 'info')
     return redirect(url_for('login'))
 
-@app.route('/home', methods=['GET', 'POST'])
+
 @app.route('/home', methods=['GET', 'POST'])
 def home():
     if 'username' not in session:
@@ -126,6 +129,7 @@ def home():
     projects = get_projects()  # استرجاع المشاريع
     return render_template('home.html', projects=projects)  # تمرير المشاريع إلى القالب
 
+
 # دالة لاسترجاع المشاريع من قاعدة البيانات
 def get_projects():
     conn = get_db_connection()
@@ -134,6 +138,7 @@ def get_projects():
     projects = c.fetchall()
     conn.close()
     return projects
+
 
 # إضافة مشروع
 @app.route('/add_project', methods=['GET', 'POST'])
@@ -189,43 +194,56 @@ def add_project():
             conn.close()
 
     return render_template('add_project.html')
+# دالة النسخ الاحتياطي
+@app.route('/backup_success')
+def backup_success():
+    return render_template('backup_success.html')
+import os
+import shutil
+from flask import flash, redirect, url_for
 
+@app.route('/backup', methods=['POST'])
+def backup():
+    db_file = 'projects.db'
+    backup_folder = r'C:\project_backups'  # ضع هنا المسار الكامل على C
+    backup_file = os.path.join(backup_folder, 'backup_projects.db')
 
-# دالة الاتصال بقاعدة البيانات
-def get_db_connection():
-    conn = sqlite3.connect('projects.db')
-    conn.row_factory = sqlite3.Row  # يجعل النتائج على شكل قاموس
-    return conn
+    try:
+        os.makedirs(backup_folder, exist_ok=True)  # إنشاء المجلد إذا ما كان موجود
+        shutil.copy(db_file, backup_file)  # نسخ قاعدة البيانات إلى المجلد
+        flash(f'تم إنشاء النسخة الاحتياطية بنجاح في: {backup_file}', 'success')
+    except Exception as e:
+        flash(f'حدث خطأ أثناء إنشاء النسخة الاحتياطية: {e}', 'danger')
+
+    return redirect(url_for('home'))  # رجوع للصفحة الرئيسية أو غيرها حسب رغبتك
+@app.route('/restore_backup', methods=['POST'])
+def restore_backup():
+    file = request.files['backup_file']
+    if file:
+        file.save('db/project.db')  # مكان قاعدة البيانات
+        flash("تم استرجاع النسخة الاحتياطية بنجاح", "success")
+    return redirect(url_for('home'))
+# تعديل مشروع
 @app.route('/edit_project', methods=['GET', 'POST'])
 def edit_project():
+    if 'username' not in session:
+        flash('يجب تسجيل الدخول أولاً!', 'warning')
+        return redirect(url_for('login'))
+
     مشاريع = []
 
     if request.method == 'POST':
         اسم_المشروع = request.form.get('اسم_المشروع', '').strip()
-        print(f"🔍 البحث عن المشروع: {اسم_المشروع}")
 
         if اسم_المشروع:
             conn = get_db_connection()
-            conn.row_factory = sqlite3.Row  # تمكين الوصول إلى البيانات بالقاموس
-            try:
-                c = conn.cursor()
-                query = """
-                    SELECT * FROM projects 
-                    WHERE LOWER(TRIM(المشروع)) LIKE LOWER(?)
-                """
-                c.execute(query, ('%' + اسم_المشروع + '%',))
-                مشاريع = c.fetchall()
+            c = conn.cursor()
+            c.execute("SELECT * FROM projects WHERE المشروع = ?", (اسم_المشروع,))
+            مشاريع = c.fetchall()
+            conn.close()
 
-                if not مشاريع:
-                    flash("⚠️ لا توجد نتائج مطابقة للبحث.", "warning")
-                else:
-                    print(f"✅ تم العثور على {len(مشاريع)} مشروع.")
-            except sqlite3.Error as e:
-                flash(f"⚠️ خطأ في تنفيذ الاستعلام: {e}", "danger")
-            finally:
-                conn.close()
-
-            مشاريع = [dict(row) for row in مشاريع]  # تحويل إلى قائمة قواميس
+            if not مشاريع:
+                flash("لا توجد نتائج مطابقة للبحث.", "warning")
 
     return render_template('edit_project.html', مشاريع=مشاريع)
 
@@ -235,7 +253,6 @@ def update_project():
     if request.method == 'POST':
         project_id = request.form.get('project_id')
 
-        # 🔹 استرجاع كافة الحقول مع التأكد من أنها ليست None
         اسم_المشروع = request.form.get('المشروع', '').strip()
         المحافظة = request.form.get('المحافظة', '').strip()
         مدرج_في_وزارة_التخطيط = request.form.get('مدرج_في_وزارة_التخطيط', '').strip()
@@ -253,7 +270,6 @@ def update_project():
         توقيع_العقد = request.form.get('توقيع_العقد', '').strip()
         ملاحظات = request.form.get('ملاحظات', '').strip()
 
-        # 🔹 الحقول التي تُرجع قيم `True` أو `False`
         دراسة_سيرة_ذاتية = bool(request.form.get('دراسة_سيرة_ذاتية'))
         الدعوات = bool(request.form.get('الدعوات'))
         الوثيقة_القياسية = bool(request.form.get('الوثيقة_القياسية'))
@@ -281,70 +297,16 @@ def update_project():
                       دراسة_سيرة_ذاتية, الدعوات, الوثيقة_القياسية, التخويل, لجان_الفتح,
                       project_id))
                 conn.commit()
-                flash("✅ تم تعديل المشروع بنجاح!", "success")
+                flash("تم تعديل المشروع بنجاح!", "success")
             except sqlite3.Error as e:
-                flash(f"⚠️ خطأ في تعديل المشروع: {e}", "danger")
+                flash(f"خطأ في تعديل المشروع: {e}", "danger")
             finally:
                 conn.close()
         else:
-            flash("⚠️ جميع الحقول المطلوبة يجب أن تكون مملوءة.", "warning")
+            flash("يجب ملء جميع الحقول المطلوبة.", "warning")
 
     return redirect(url_for('edit_project'))
-@app.route('/reports', methods=['GET', 'POST'])
-def reports():
-    المشاريع = []
 
-    if request.method == 'POST':
-        اسم_المشروع = request.form.get('اسم_المشروع', '').strip()
-        print(f"🔍 البحث عن المشروع: {اسم_المشروع}")
-
-        if اسم_المشروع:
-            conn = get_db_connection()
-            try:
-                c = conn.cursor()
-                query = """
-                    SELECT * FROM projects 
-                    WHERE LOWER(TRIM(المشروع)) LIKE LOWER(?)
-                """
-                c.execute(query, ('%' + اسم_المشروع + '%',))
-                المشاريع = c.fetchall()
-                if not المشاريع:
-                    print("⚠️ لا توجد نتائج مطابقة للبحث.")
-                else:
-                    print(f"✅ تم العثور على {len(المشاريع)} مشروع.")
-            except sqlite3.Error as e:
-                print(f"⚠️ خطأ في تنفيذ الاستعلام: {e}")
-            finally:
-                conn.close()
-
-            المشاريع = [dict(مشروع) for مشروع in المشاريع]
-    return render_template('reports.html', المشاريع=المشاريع)
-
-@app.route('/reports1', methods=['GET', 'POST'])
-def reports1():
-    المشاريع = []
-
-    if request.method == 'POST':
-        المحافظة = request.form.get('المحافظة', '').strip()
-
-        if المحافظة:
-            try:
-                conn = get_db_connection()
-                c = conn.cursor()
-                c.execute("SELECT * FROM projects WHERE المحافظة = ?", (المحافظة,))
-                المشاريع = c.fetchall()
-
-                # طباعة عدد النتائج
-                print(f"عدد النتائج: {len(المشاريع)}")
-                if not المشاريع:
-                    print("لا توجد نتائج.")
-
-            except sqlite3.Error as e:
-                print(f"Database error: {e}")
-            finally:
-                conn.close()
-
-    return render_template('reports1.html', المشاريع=المشاريع)
 
 # حذف مشروع
 @app.route('/delete_project', methods=['GET', 'POST'])
@@ -378,6 +340,9 @@ def delete_project():
             flash('يرجى إدخال اسم المشروع!', 'danger')
 
     return render_template('delete_project.html')
+
+
+# دالة لتحميل ملف Excel
 @app.route('/upload_excel', methods=['GET', 'POST'])
 def upload_excel():
     if request.method == 'POST':
@@ -391,42 +356,90 @@ def upload_excel():
             return redirect(request.url)
 
         try:
-            # قراءة ملف Excel باستخدام Pandas
             df = pd.read_excel(file)
-
-            # تحويل البيانات إلى قائمة من القواميس
             المشاريع = df.to_dict(orient='records')
-
-            # تمرير البيانات إلى النموذج
             return render_template('your_template.html', المشاريع=المشاريع)
         except Exception as e:
             flash(f'حدث خطأ: {e}', 'danger')
             return redirect(request.url)
 
     return render_template('your_template.html')
-import pandas as pd
-from flask import Response, flash, redirect, url_for
-from io import BytesIO
 
+
+# تصدير البيانات إلى Excel
 @app.route('/export_excel', methods=['GET'])
 def export_excel():
-        # الاتصال بقاعدة البيانات
-        conn = sqlite3.connect('projects.db')
+    conn = sqlite3.connect('projects.db')
+    df = pd.read_sql_query("SELECT * FROM projects", conn)
+    conn.close()
 
-        # قراءة البيانات من الجدول
-        df = pd.read_sql_query("SELECT * FROM projects", conn)
+    output_file = 'projects.xlsx'
+    df.to_excel(output_file, index=False, engine='openpyxl')
 
-        # إغلاق الاتصال
+    return send_file(output_file, as_attachment=True)
+
+
+# عرض جميع المشاريع
+@app.route('/reportall', methods=['GET'])
+def reportall():
+    المشاريع = []
+    try:
+        conn = get_db_connection()
+        c = conn.cursor()
+        c.execute("SELECT * FROM projects")
+        النتائج = c.fetchall()
+        المشاريع = [dict(row) for row in النتائج]
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+    finally:
         conn.close()
 
-        # تصدير البيانات إلى ملف Excel
-        output_file = 'projects.xlsx'
-        df.to_excel(output_file, index=False, engine='openpyxl')
-
-        # إرسال الملف للمستخدم
-        return send_file(output_file, as_attachment=True)
+    return render_template('reportall.html', المشاريع=المشاريع)
 
 
+@app.route('/reports', methods=['GET', 'POST'])
+def reports():
+    المشاريع = []
+
+    if request.method == 'POST':
+        اسم_المشروع = request.form.get('اسم_المشروع', '').strip()
+
+        try:
+            conn = get_db_connection()
+            c = conn.cursor()
+            c.execute("SELECT * FROM projects WHERE المشروع = ?", (اسم_المشروع,))
+            المشاريع = c.fetchall()
+
+            if not المشاريع:
+                flash("لا توجد نتائج.", "warning")
+        except sqlite3.Error as e:
+            flash(f"خطأ في قاعدة البيانات: {e}", "danger")
+        finally:
+            conn.close()
+
+    return render_template('reports.html', المشاريع=المشاريع)
+@app.route('/reports1', methods=['GET', 'POST'])
+def reports1():
+    المشاريع = []
+
+    if request.method == 'POST':
+        المحافظة = request.form.get('المحافظة', '').strip()
+
+        if المحافظة:
+            try:
+                conn = get_db_connection()
+                c = conn.cursor()
+                c.execute("SELECT * FROM projects WHERE المحافظة = ?", (المحافظة,))
+                المشاريع = c.fetchall()
+
+                if not المشاريع:
+                    flash("لا توجد نتائج.", "warning")
+            except sqlite3.Error as e:
+                flash(f"خطأ في قاعدة البيانات: {e}", "danger")
+            finally:
+                conn.close()
+
+    return render_template('reports1.html', المشاريع=المشاريع)
 # تشغيل التطبيق
 if __name__ == '__main__':
     init_db()

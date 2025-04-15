@@ -6,75 +6,75 @@
     <title>تقرير حسب اسم المشروع</title>
     <style>
         body {
-            direction: rtl;  /* تعيين اتجاه النص من اليمين إلى اليسار */
-            font-family: Arial, sans-serif;  /* تعيين خط مريح */
-            background-color: #f8f9fa;  /* لون خلفية خفيف */
-            margin: 20px;  /* إضافة مسافة حول الصفحة */
+            direction: rtl;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 20px;
         }
         h2, h3 {
-            color: #dc3545;  /* لون العنوان أحمر */
-            text-align: center;  /* محاذاة العنوان في المنتصف */
+            color: #dc3545;
+            text-align: center;
         }
         .search-container {
-            background-color: #ffffff;  /* خلفية بيضاء لخانة البحث */
-            border: 2px solid #dc3545;  /* حدود باللون الأحمر */
-            border-radius: 8px;  /* زوايا مدورة */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);  /* ظل خفيف */
-            padding: 20px;  /* مسافة داخلية */
-            margin: 0 auto;  /* محاذاة في المنتصف */
-            max-width: 600px;  /* عرض أقصى للخانة */
+            background-color: #ffffff;
+            border: 2px solid #dc3545;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 600px;
         }
         .search-container label {
-            display: block;  /* جعل التسمية في سطر منفصل */
-            margin-bottom: 10px;  /* مسافة أسفل التسمية */
-            font-size: 18px;  /* حجم أكبر للتسمية */
+            display: block;
+            margin-bottom: 10px;
+            font-size: 18px;
         }
         .search-container input[type="text"] {
-            width: 100%;  /* جعل حقل الإدخال يأخذ عرض الخانة بالكامل */
-            padding: 10px;  /* مسافة داخلية للحقل */
-            border: 1px solid #ced4da;  /* حدود للحقل */
-            border-radius: 5px;  /* زوايا مدورة للحقل */
-            font-size: 16px;  /* حجم الخط داخل الحقل */
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);  /* ظل داخلي */
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 16px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
         }
         .search-container button {
-            background-color: #dc3545;  /* لون خلفية الزر */
-            color: white;  /* لون النص في الزر */
-            border: none;  /* إزالة الحدود */
-            padding: 10px;  /* مسافة داخلية للزر */
-            border-radius: 5px;  /* زوايا مدورة للزر */
-            font-size: 16px;  /* حجم الخط في الزر */
-            cursor: pointer;  /* تغيير المؤشر عند المرور فوق الزر */
-            width: 100%;  /* جعل الزر يأخذ عرض الخانة بالكامل */
-            margin-top: 10px;  /* إضافة مسافة أعلى الزر */
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
         }
         .search-container button:hover {
-            background-color: #c82333;  /* لون الخلفية عند تمرير الماوس */
+            background-color: #c82333;
         }
         table {
-            width: 100%;  /* جعل الجدول يأخذ عرض الصفحة بالكامل */
-            border-collapse: collapse;  /* دمج حدود الخلايا */
-            margin-top: 20px;  /* إضافة مسافة فوق الجدول */
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
         th, td {
-            padding: 10px;  /* إضافة مسافة داخل الخلايا */
-            text-align: center;  /* محاذاة النص في المنتصف */
-            border: 1px solid #dee2e6;  /* حدود الخلايا */
-            white-space: nowrap;  /* منع التفاف النص داخل الخلايا */
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            white-space: nowrap;
         }
         th {
-            background-color: #dc3545;  /* لون خلفية رأس الجدول */
-            color: white;  /* لون النص في رأس الجدول */
+            background-color: #dc3545;
+            color: white;
         }
         tr:nth-child(even) {
-            background-color: #f2f2f2;  /* خلفية بديلة للصفوف */
+            background-color: #f2f2f2;
         }
         tr:hover {
-            background-color: #e2e2e2;  /* تأثير عند تمرير الماوس على الصف */
+            background-color: #e2e2e2;
         }
         .alert {
-            margin-top: 20px;  /* إضافة مسافة أعلى تنبيهات النجاح أو الخطأ */
-            text-align: center;  /* محاذاة النص في المنتصف */
+            margin-top: 20px;
+            text-align: center;
         }
     </style>
 </head>
@@ -121,29 +121,29 @@
         <tbody>
             {% for مشروع in المشاريع %}
             <tr>
-                 <td>{{ loop.index }}</td>  <!-- استخدم loop.index للتسلسل التلقائي -->
-                <td>{{ مشروع.get('المحافظة', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('المشروع', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('مدرج_في_وزارة_التخطيط', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('مؤشر_لدى_وزارة_المالية', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('الكلفة_الكلية', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('الاستثناء_من_أساليب_التعاقد', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('استثناء', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('الإعلان', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('دراسة_سيرة_ذاتية', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('الدعوات', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('الوثيقة_القياسية', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('التخويل', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('تاريخ_غلق_الدعوات', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('لجان_الفتح', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('لجنة_تحليل', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('قرار_لجنة_التحليل_الى_دائرة_العقود', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('لجنة_المراجعة_والمصادقة', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('الإحالة', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('مسودة_العقد', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('توقيع_العقد', 'غير متوفر') }}</td>
-                <td>{{ مشروع.get('ملاحظات', 'غير متوفر') }}</td>
-            </tr>
+                  <td>{{ loop.index }}</td>  <!-- استخدم loop.index للتسلسل التلقائي -->
+                        <td>{{ مشروع['المحافظة'] }}</td>
+                        <td>{{ مشروع['المشروع'] }}</td>
+                        <td>{{ مشروع['مدرج_في_وزارة_التخطيط'] }}</td>
+                        <td>{{ مشروع['مؤشر_لدى_وزارة_المالية'] }}</td>
+                        <td>{{ مشروع['الكلفة_الكلية'] }}</td>
+                        <td>{{ مشروع['الاستثناء_من_أساليب_التعاقد'] }}</td>
+                        <td>{{ مشروع['استثناء'] }}</td>
+                        <td>{{ مشروع['الإعلان'] }}</td>
+                        <td>{{ مشروع['دراسة_سيرة_ذاتية'] }}</td>
+                        <td>{{ مشروع['الدعوات'] }}</td>
+                        <td>{{ مشروع['الوثيقة_القياسية'] }}</td>
+                        <td>{{ مشروع['التخويل'] }}</td>
+                        <td>{{ مشروع['تاريخ_غلق_الدعوات'] }}</td>
+                        <td>{{ مشروع['لجان_الفتح'] }}</td>
+                        <td>{{ مشروع['لجنة_تحليل'] }}</td>
+                        <td>{{ مشروع['قرار_لجنة_التحليل_الى_دائرة_العقود'] }}</td>
+                        <td>{{ مشروع['لجنة_المراجعة_والمصادقة'] }}</td>
+                        <td>{{ مشروع['الإحالة'] }}</td>
+                        <td>{{ مشروع['مسودة_العقد'] }}</td>
+                        <td>{{ مشروع['توقيع_العقد'] }}</td>
+                        <td>{{ مشروع['ملاحظات'] }}</td>
+                    </tr>
             {% endfor %}
         </tbody>
     </table>
