@@ -1,0 +1,89 @@
+[33mcommit 219adbb32a67fcd6f2390aec5e73c63cfa96c947[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: gmoch-g <mochg23@gmail.com>
+Date:   Tue Apr 15 13:03:02 2025 +0300
+
+    Updated project_system with changes
+
+[33mcommit 55c9fe001ed786b40bf4b783f015b02b74ae2395[m
+Author: mochmagare1 <mochmagare1@gmail.com>
+Date:   Tue Mar 18 12:39:18 2025 +0300
+
+    Initial commit
+
+[33mcommit fda7adcb2ffd45bbe80e744a467469a15e95c8a4[m
+Author: mochmagare <mochmagare1@gmail.com>
+Date:   Mon Mar 17 10:24:46 2025 +0300
+
+    Initial commit
+
+[33mcommit 1b80e3887ca975ecb45fdc6ecfa437976174d98e[m
+Author: mochmagare <mochmagare1@gmail.com>
+Date:   Mon Mar 17 09:23:25 2025 +0300
+
+    Re-add missing LFS objects
+
+[33mcommit ba3317fa72655d68b16eab844889a689c9bbb140[m
+Author: mochmagare <mochmagare1@gmail.com>
+Date:   Mon Mar 17 09:01:00 2025 +0300
+
+    Add missing executables to LFS
+
+[33mcommit 8301334902cf35c8272e522e32b3bfc42141b9d8[m
+Author: mochmagare <mochmagare1@gmail.com>
+Date:   Mon Mar 17 08:56:15 2025 +0300
+
+    Add app.pkg back to LFS
+
+[33mcommit 8036bf23eb41dfb49ef6b51795584008c9a4cd9b[m
+Author: mochmagare <mochmagare1@gmail.com>
+Date:   Mon Mar 17 00:55:43 2025 +0300
+
+    Add large executable and package files to LFS
+
+[33mcommit 220d1f5fa496d2395defe00545f9099af55d58ac[m
+Author: mochmagare <mochmagare1@gmail.com>
+Date:   Mon Mar 17 00:42:05 2025 +0300
+
+    الوصف المناسب للتغييرات
+
+[33mcommit 0de1fbd561d7ee3ca1f24bc256a32219b5b53216[m
+Author: mochmagare <mochmagare1@gmail.com>
+Date:   Mon Mar 17 00:08:18 2025 +0300
+
+    Add files with Git LFS
+
+[33mcommit 129c5864fc99a72b8803fa183ff05d9f2439d5e1[m
+Author: mochmagare <mochmagare1@gmail.com>
+Date:   Sun Mar 16 23:58:29 2025 +0300
+
+    first commit
+
+[33mcommit b02eb005637714ac7ed3164f4e900f6ddf1f8811[m
+Author: mochmagare <mochmagare1@gmail.com>
+Date:   Sun Mar 16 23:36:27 2025 +0300
+
+    Track large files with Git LFS
+
+[33mcommit a17b6de28c5b3658f6cefba74b501227115c4bec[m
+Author: mochmagare <mochmagare1@gmail.com>
+Date:   Sun Mar 16 23:30:18 2025 +0300
+
+    Add app.exe
+
+[33mcommit 0bcdee975f2d0794c9a08945bb36afd25500bff3[m
+Author: mochmagare <mochmagare1@gmail.com>
+Date:   Sun Mar 16 23:23:16 2025 +0300
+
+    Updated LFS tracking
+
+[33mcommit 30bd29e5e74ad1dbef75e5e562a6c464bc6511c8[m
+Author: mochmagare <mochmagare1@gmail.com>
+Date:   Sun Mar 16 23:17:45 2025 +0300
+
+    first commit
+
+[33mcommit 7ae25a645e5afc88d1acd41445c4927d0e3dacce[m
+Author: mochmagare <mochmagare1@gmail.com>
+Date:   Sun Mar 16 22:42:58 2025 +0300
+
+    Your commit message
