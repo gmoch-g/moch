@@ -152,6 +152,12 @@ def login():
         else:
             flash('اسم المستخدم أو كلمة المرور غير صحيحة.', 'danger')
     return render_template('login.html')
+@app.route('/mplanning')
+def mplanning():
+    return render_template('mplanning.html')
+@app.route('/execution_projects')
+def execution_projects():
+    return render_template('execution_projects.html')
 
 # صفحة تسجيل المستخدمين
 @app.route('/register', methods=['GET', 'POST'])
@@ -473,15 +479,26 @@ def addproject():
             conn.close()
     return render_template('addproject.html')
 
+
 @app.route('/export_excel', methods=['GET'])
 def export_excel():
+    # الاتصال بقاعدة البيانات
     conn = sqlite3.connect('projects.db')
+
+    # قراءة البيانات من الجدول projects إلى DataFrame
     df = pd.read_sql_query("SELECT * FROM projects", conn)
+
+    # غلق الاتصال بقاعدة البيانات
     conn.close()
 
+    # تحديد اسم ملف Excel
     output_file = 'projects.xlsx'
+
+    # تصدير البيانات إلى ملف Excel
     df.to_excel(output_file, index=False, engine='openpyxl')
 
+    # إرسال الملف للمستخدم
+    return send_file(output_file, as_attachment=True)
 @app.route('/edit_projectadd', methods=['GET', 'POST'])
 def edit_projectadd():
     المشروع = None
