@@ -201,6 +201,12 @@ def get_projects():
     projects = c.fetchall()
     conn.close()
     return projects
+@app.route('/mplanning')
+def mplanning():
+    return render_template('mplanning.html')
+@app.route('/execution_projects')
+def execution_projects():
+    return render_template('execution_projects.html')
 
 # إضافة مشروع
 @app.route('/add_project', methods=['GET', 'POST'])
@@ -543,6 +549,20 @@ def report_projectadd():
     conn.close()
     # إرسال البيانات إلى القالب
     return render_template('report_projectadd.html', المشاريع=المشاريع)
+@app.route('/reportadd', methods=['GET', 'POST'])
+def reportadd():
+    المشاريع = []
+
+    if request.method == 'POST':
+        المحافظة = request.form['المحافظة']
+        conn = sqlite3.connect('projects.db')
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM "قيد_التنفيذ" WHERE المحافظة = ?', (المحافظة,))
+        المشاريع = cursor.fetchall()
+        conn.close()
+
+    return render_template('reportadd.html', المشاريع=المشاريع)
 # تشغيل التطبيق
 if __name__ == '__main__':
     init_db()

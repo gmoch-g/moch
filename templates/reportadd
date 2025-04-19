@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقارير المشاريع قيد التنفيذ</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            direction: rtl;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .table th, .table td {
+            white-space: nowrap;
+            padding: 10px;
+            text-align: center;
+        }
+        .table thead th {
+            background-color: #007bff;
+            color: white;
+        }
+        .alert {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>تقارير المشاريع قيد التنفيذ</h1>
+        <form method="POST" class="mb-4 text-right">
+            <div class="form-group">
+                <label for="المحافظة">اختر المحافظة:</label>
+                <select class="form-control" name="المحافظة" required>
+                    <option value="">اختر المحافظة</option>
+                    <option value="بغداد">بغداد</option>
+                    <option value="البصرة">البصرة</option>
+                    <option value="نينوى">نينوى</option>
+                    <option value="أربيل">أربيل</option>
+                    <option value="كركوك">كركوك</option>
+                    <option value="النجف">النجف</option>
+                    <option value="كربلاء">كربلاء</option>
+                    <option value="ديالى">ديالى</option>
+                    <option value="صلاح الدين">صلاح الدين</option>
+                    <option value="واسط">واسط</option>
+                    <option value="بابل">بابل</option>
+                    <option value="الديوانية">الديوانية</option>
+                    <option value="ذي قار">ذي قار</option>
+                    <option value="المثنى">المثنى</option>
+                    <option value="ميسان">ميسان</option>
+                    <option value="الأنبار">الأنبار</option>
+                    <option value="دهوك">دهوك</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">عرض المشاريع</button>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped text-center align-middle">
+                <thead>
+                    <tr>
+                        <th>التسلسل</th>
+                        <th>اسم المشروع</th>
+                        <th>المحافظة</th>
+                        <th>الشركة المنفذة</th>
+                        <th>الكلفة الكلية</th>
+                        <th>تاريخ بدء المشروع</th>
+                        <th>تاريخ الانتهاء المتوقع</th>
+                        <th>نسبة الانجاز المخططة</th>
+                        <th>نسبة الانجاز الفعلية</th>
+                        <th>نسبة الإحراف</th>
+                        <th>أسباب الإحراف</th>
+                        <th>مدير المشروع</th>
+                        <th>المهندس القيم</th>
+                        <th>البرنامج الحكومي</th>
+                        <th>تاريخ التحديث</th>
+                        <th>الملاحظات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for مشروع in المشاريع %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ مشروع['اسم_المشروع'] }}</td>
+                        <td>{{ مشروع['المحافظة'] }}</td>
+                        <td>{{ مشروع['الشركة_المنفذة'] }}</td>
+                        <td>{{ مشروع['الكلفة_الكلية'] }}</td>
+                        <td>{{ مشروع['تاريخ_بدء_المشروع'] }}</td>
+                        <td>{{ مشروع['تاريخ_الانتهاء_المتوقع'] }}</td>
+                        <td>{{ مشروع['نسبة_الانجاز_المخططة'] }}</td>
+                        <td>{{ مشروع['نسبة_الانجاز_الفعلية'] }}</td>
+                        <td>{{ مشروع['نسبة_الإحراف'] }}</td>
+                        <td>{{ مشروع['أسباب_الإحراف'] }}</td>
+                        <td>{{ مشروع['مدير_المشروع'] }}</td>
+                        <td>{{ مشروع['المهندس_القيم'] }}</td>
+                        <td>{{ مشروع['البرنامج_الحكومي'] }}</td>
+                        <td>{{ مشروع['تاريخ_التحديث'] }}</td>
+                        <td>{{ مشروع['الملاحظات'] }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="16">لا توجد مشاريع قيد التنفيذ متاحة.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
