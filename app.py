@@ -201,6 +201,12 @@ def get_projects():
     projects = c.fetchall()
     conn.close()
     return projects
+@app.route('/mplanning')
+def mplanning():
+    return render_template('mplanning.html')
+@app.route('/execution_projects')
+def execution_projects():
+    return render_template('execution_projects.html')
 
 # إضافة مشروع
 @app.route('/add_project', methods=['GET', 'POST'])
