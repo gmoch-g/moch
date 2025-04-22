@@ -28,6 +28,7 @@ def create_table():
             أسباب_الإحراف TEXT,
             مدير_المشروع TEXT,
             المهندس_القيم TEXT,
+             رقم_الهاتف REAL,
             البرنامج_الحكومي TEXT,
             تاريخ_التحديث DATE,
             الملاحظات TEXT
@@ -70,6 +71,7 @@ class قيد_التنفيذ(db.Model):
     أسباب_الإحراف = db.Column(db.Text, nullable=True)
     مدير_المشروع = db.Column(db.String(100), nullable=False)
     المهندس_القيم = db.Column(db.String(100), nullable=False)
+    رقم_الهاتف = db.Column(db.Text, nullable=True)
     البرنامج_الحكومي = db.Column(db.String(100), nullable=False)
     تاريخ_التحديث = db.Column(db.Date, nullable=False)
     الملاحظات = db.Column(db.Text, nullable=True)
@@ -262,6 +264,7 @@ def add_project():
             conn.close()
 
     return render_template('add_project.html')
+
 # تعديل مشروع
 @app.route('/edit_project', methods=['GET', 'POST'])
 def edit_project():
@@ -270,20 +273,28 @@ def edit_project():
         return redirect(url_for('login'))
 
     مشاريع = []
+    المشروع_المختار = None
 
     if request.method == 'POST':
-        اسم_المشروع = request.form.get('اسم_المشروع', '').strip()
-
-        if اسم_المشروع:
+        المشروع_المختار = request.form.get('المشروع', '').strip()
+        if المشروع_المختار:
             conn = get_db_connection()
             c = conn.cursor()
-            c.execute("SELECT * FROM projects WHERE المشروع = ?", (اسم_المشروع,))
+            c.execute("SELECT * FROM projects WHERE المشروع = ?", (المشروع_المختار,))
             مشاريع = c.fetchall()
             conn.close()
 
             if not مشاريع:
-                flash("لا توجد نتائج مطابقة للبحث.", "warning")
-    return render_template('edit_project.html', مشاريع=مشاريع)
+                flash('المشروع غير موجود.', 'danger')
+
+    # لاسترجاع جميع أسماء المشاريع للقائمة المنسدلة
+    conn = get_db_connection()
+    c = conn.cursor()
+    c.execute("SELECT المشروع FROM projects")
+    المشاريع_الكلية = c.fetchall()
+    conn.close()
+
+    return render_template('edit_project.html', مشاريع=مشاريع, المشاريع_الكلية=المشاريع_الكلية, المشروع_المختار=المشروع_المختار)
 @app.route('/update_project', methods=['POST'])
 def update_project():
     if 'username' not in session:
@@ -487,22 +498,39 @@ def export_excel():
 
     output_file = 'projects.xlsx'
     df.to_excel(output_file, index=False, engine='openpyxl')
-
 @app.route('/edit_projectadd', methods=['GET', 'POST'])
 def edit_projectadd():
-    المشروع = None
-    if request.method == 'POST':
-        اسم_المشروع = request.form['اسم_المشروع']
-        conn = sqlite3.connect('projects.db')
-        conn.row_factory = sqlite3.Row
-        c = conn.cursor()
-        c.execute("SELECT * FROM 'قيد_التنفيذ' WHERE اسم_المشروع = ?", (اسم_المشروع,))
-        المشروع = c.fetchone()
-        conn.close()
-        if not المشروع:
-            flash('لم يتم العثور على مشروع بهذا الاسم.', 'warning')
-    return render_template('edit_projectadd.html', المشروع=المشروع)
+    if 'username' not in session:
+        flash('يجب تسجيل الدخول أولاً!', 'warning')
+        return redirect(url_for('login'))
 
+    مشاريع = []
+    selected_project = request.form.get('اسم_المشروع')
+
+    if selected_project:
+        conn = get_db_connection()
+        if conn:
+            c = conn.cursor()
+            c.execute("SELECT * FROM قيد_التنفيذ WHERE اسم_المشروع = ?", (selected_project,))
+            # تحويل الصف إلى قاموس
+            مشاريع = [dict(row) for row in c.fetchall()]
+            conn.close()
+
+            if not مشاريع:
+                flash('المشروع غير موجود.', 'danger')
+
+    # استرجاع جميع المشاريع لعرضها في القائمة المنسدلة
+    conn = get_db_connection()
+    if conn:
+        c = conn.cursor()
+        c.execute("SELECT اسم_المشروع FROM قيد_التنفيذ")
+        المشاريع_الكلية = c.fetchall()
+        conn.close()
+
+        if not المشاريع_الكلية:
+            flash('لا توجد مشاريع في قاعدة البيانات', 'warning')
+
+    return render_template('edit_projectadd.html', المشاريع_الكلية=المشاريع_الكلية, مشاريع=مشاريع, selected_project=selected_project)
 
 @app.route('/update_projectadd', methods=['POST'])
 def update_projectadd():
@@ -520,6 +548,7 @@ def update_projectadd():
         request.form['أسباب_الإحراف'],
         request.form['مدير_المشروع'],
         request.form['المهندس_القيم'],
+        request.form['رقم_الهاتف'],
         request.form['البرنامج_الحكومي'],
         request.form['تاريخ_التحديث'],
         request.form['الملاحظات'],
@@ -532,7 +561,7 @@ def update_projectadd():
             اسم_المشروع=?, المحافظة=?, الشركة_المنفذة=?, الكلفة_الكلية=?, 
             تاريخ_بدء_المشروع=?, تاريخ_الانتهاء_المتوقع=?, نسبة_الانجاز_المخططة=?, 
             نسبة_الانجاز_الفعلية=?, نسبة_الإحراف=?, أسباب_الإحراف=?, مدير_المشروع=?, 
-            المهندس_القيم=?, البرنامج_الحكومي=?, تاريخ_التحديث=?, الملاحظات=?
+            المهندس_القيم=?,رقم_الهاتف=?, البرنامج_الحكومي=?, تاريخ_التحديث=?, الملاحظات=?
         WHERE id=?
     ''', البيانات)
     conn.commit()
@@ -563,6 +592,58 @@ def reportadd():
         conn.close()
 
     return render_template('reportadd.html', المشاريع=المشاريع)
+@app.route('/projects_list', methods=['GET'])
+
+@app.route('/projects_list/<int:project_id>', methods=['GET', 'POST'])
+def projects_list(project_id):
+    project = Project.query.get(project_id)  # تأكد أن project يحتوي على البيانات الصحيحة من قاعدة البيانات
+    if request.method == 'POST':
+        # تحديث البيانات من النموذج
+        project.المحافظة = request.form['المحافظة']
+        project.المشروع = request.form['المشروع']
+        project.مدرج_في_وزارة_التخطيط = request.form['مدرج_في_وزارة_التخطيط']
+        project.الكلفة_الكلية = request.form['الكلفة_الكلية']
+        project.الاستثناء_من_أساليب_التعاقد = request.form['الاستثناء_من_أساليب_التعاقد']
+        project.الإعلان = request.form['الإعلان']
+        project.ملاحظات = request.form['ملاحظات']
+        db.session.commit()  # حفظ التعديلات في قاعدة البيانات
+        return redirect(url_for('projects_list'))  # إعادة التوجيه بعد الحفظ
+
+
+@app.route('/delete_projectadd.html', methods=['GET', 'POST'])
+def delete_projectadd():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        try:
+            # الحصول على اسم المشروع من النموذج
+            اسم_المشروع = request.form['اسم_المشروع']
+
+            # التأكد من وجود اسم المشروع
+            if not اسم_المشروع:
+                flash("يرجى اختيار اسم المشروع", 'danger')
+                return redirect(url_for('delete_projectadd'))
+
+            # الاتصال بقاعدة البيانات
+            conn = sqlite3.connect('projects.db')
+            c = conn.cursor()
+
+            # تنفيذ عملية الحذف
+            c.execute("DELETE FROM قيد_التنفيذ WHERE اسم_المشروع = ?", (اسم_المشروع,))
+            conn.commit()
+            conn.close()
+
+            flash('تم حذف المشروع بنجاح', 'success')
+            return redirect(url_for('some_other_page'))  # إعادة التوجيه إلى صفحة أخرى بعد الحذف
+        except Exception as e:
+            flash(f"حدث خطأ أثناء الحذف: {e}", 'danger')
+            return redirect(url_for('delete_projectadd'))  # العودة لنفس الصفحة عند حدوث خطأ
+    else:
+        # في حالة طريقة GET، يمكن عرض الصفحة الفارغة أو إجراء أي عملية أخرى
+        return render_template('delete_projectadd.html')
+
+
 # تشغيل التطبيق
 if __name__ == '__main__':
     init_db()
