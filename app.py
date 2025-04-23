@@ -26,6 +26,7 @@ def create_table():
             نسبة_الانجاز_الفعلية REAL NOT NULL,
             نسبة_الإحراف REAL,
             أسباب_الإحراف TEXT,
+            TEXT,الإجراءات_المتخذة
             مدير_المشروع TEXT,
             المهندس_القيم TEXT,
              رقم_الهاتف REAL,
@@ -69,6 +70,7 @@ class قيد_التنفيذ(db.Model):
     نسبة_الانجاز_الفعلية = db.Column(db.Float, nullable=False)
     نسبة_الإحراف = db.Column(db.Float, nullable=False)
     أسباب_الإحراف = db.Column(db.Text, nullable=True)
+    الإجراءات_المتخذة = db.Column(db.Text, nullable=True)
     مدير_المشروع = db.Column(db.String(100), nullable=False)
     المهندس_القيم = db.Column(db.String(100), nullable=False)
     رقم_الهاتف = db.Column(db.Text, nullable=True)
